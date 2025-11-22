@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Invitación — WEBONES 05</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rubik:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b1220;
+      --accent:#6cc644; /* verde hierba */
+      --dirt:#6b4b2b;
+      --panel: rgba(0,0,0,0.55);
+      --glass: rgba(255,255,255,0.06);
+    }
+    html,body{height:100%;margin:0;font-family:Rubik, system-ui, sans-serif;background:var(--bg);color:#e9f0f2}
+
+    /* Pixel-y header */
+    header{
+      display:flex;align-items:center;gap:18px;padding:18px 28px;background:linear-gradient(180deg,#07111a, #09202b);box-shadow:0 6px 30px rgba(0,0,0,0.6);
+    }
+    .logo{
+      font-family:'Press Start 2P', monospace;font-size:20px;color:var(--accent);letter-spacing:1px;text-shadow:0 4px 0 rgba(0,0,0,0.6), 0 0 12px rgba(108,198,68,0.08);
+      display:flex;align-items:center;gap:10px
+    }
+    .logo .cube{
+      width:44px;height:44px;background:linear-gradient(#74c04b,#4a8b2a);border:4px solid #2f4f18;box-shadow:inset 0 -8px 0 rgba(0,0,0,0.12);transform:skewY(-6deg);display:block;
+    }
+
+    main{display:grid;grid-template-columns:1fr 420px;gap:28px;padding:36px;max-width:1200px;margin:28px auto;align-items:start}
+
+    /* Left: hero */
+    .hero{
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.08));border-radius:14px;padding:28px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.03)
+    }
+    .sky{
+      position:absolute;inset:0;background-image:linear-gradient(180deg,#7ec8ff33,#0b176433);opacity:0.9;mix-blend-mode:overlay;pointer-events:none
+    }
+
+    .title{
+      font-family:'Press Start 2P';font-size:28px;margin:6px 0;color:var(--accent)
+    }
+    .subtitle{font-weight:700;margin:6px 0 18px;color:#dbeee1}
+
+    .inv-card{display:flex;gap:18px;align-items:center;padding:18px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));box-shadow:0 6px 20px rgba(3,7,11,0.6);border:1px solid rgba(255,255,255,0.03)}
+    .inv-card .icon{width:120px;height:120px;border-radius:8px;background:repeating-linear-gradient(45deg,#6cc644 0 16px,#5aa338 16px 32px);display:flex;align-items:center;justify-content:center;font-family:'Press Start 2P';font-size:16px;color:#072205}
+
+    .inv-details{flex:1}
+    .inv-details p{margin:6px 0}
+    .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+    .meta .pill{background:var(--glass);padding:8px 12px;border-radius:8px;font-weight:700;border:1px solid rgba(255,255,255,0.03)}
+
+    /* Right: panel */
+    aside.panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));backdrop-filter: blur(6px);padding:20px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+
+    .menu{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+    .menu button{padding:8px 12px;border-radius:8px;border:none;background:rgba(255,255,255,0.03);color:#eaf2ef;font-weight:700;cursor:pointer}
+
+    .server-box{margin-top:10px;padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.15));border:1px dashed rgba(255,255,255,0.03)}
+    .server-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+
+    .btn{display:inline-block;padding:10px 14px;border-radius:10px;border:none;background:var(--accent);color:#06210a;font-weight:800;cursor:pointer;font-family:'Press Start 2P';font-size:12px}
+    .btn.secondary{background:transparent;color:#eaf2ef;border:1px solid rgba(255,255,255,0.06);font-family:Rubik}
+
+    footer{margin-top:20px;text-align:center;opacity:0.8;font-size:13px}
+
+    /* blocky ground */
+    .ground{position:absolute;left:0;right:0;bottom:0;height:180px;background-image:linear-gradient(180deg,#5aa338 0 50%, #4b371e 50% 100%);transform:skewY(-2deg);box-shadow:0 -6px 30px rgba(0,0,0,0.6)}
+
+    /* floating particles (like pixel confetti) */
+    .particles{position:absolute;inset:0;pointer-events:none}
+    .pixel{width:6px;height:6px;position:absolute;background:rgba(255,255,255,0.12);box-shadow:0 0 0 1px rgba(0,0,0,0.15);animation:float 6s linear infinite}
+    @keyframes float{0%{transform:translateY(-10vh) rotate(0);}100%{transform:translateY(110vh) rotate(360deg)}}
+
+    /* responsive */
+    @media(max-width:920px){main{grid-template-columns:1fr;padding:18px}aside.panel{order:2}}
+
+    /* RSVP modal */
+    .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(2,6,10,0.6);visibility:hidden;opacity:0;transition:all .18s}
+    .modal.show{visibility:visible;opacity:1}
+    .modal .box{background:linear-gradient(180deg,#02131a,#022436);padding:22px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);width:92%;max-width:520px}
+    .modal h3{font-family:'Press Start 2P';font-size:14px;color:var(--accent)}
+
+    /* small helpers */
+    .muted{opacity:0.8;font-size:13px}
+    .center{text-align:center}
+  </style>
+</head>
+<body>
+  <header>
+    <span class="logo"><span class="cube" aria-hidden></span>WEBONES 05</span>
+    <div style="flex:1"></div>
+    <nav class="muted">Invitación oficial • Temática Minecraft</nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="sky" aria-hidden></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:18px;">
+        <div>
+          <div class="title">¡Estás invitado a WEBONES 05!</div>
+          <div class="subtitle">Una experiencia privada con temática Minecraft</div>
+        </div>
+        <div class="muted">Evento exclusivo • Comunidad WEBONES</div>
+      </div>
+
+      <div style="height:18px"></div>
+
+      <div class="inv-card">
+        <div class="icon">Wbns<br> 5</div>
+        <div class="inv-details">
+          <p>Ven a celebrar el lanzamiento del servidor WEBONES 05.</p>
+          <div class="meta">
+            <div class="pill">Fecha: <strong id="fecha-text">Viernes, 5 de Diciembre</strong></div>
+            <div class="pill">Hora: <strong id="hora-text">15:00 PY</strong></div>
+            <div class="pill">Modalidad: Bedrock</div>
+          </div>
+          <p style="margin-top:10px" class="muted">Detalles y servidor a la derecha — pulsa "Copiar IP" para conectarte.</p>
+        </div>
+      </div>
+
+      <div style="height:18px"></div>
+
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <button class="btn" onclick="openModal()">Confirmar asistencia</button>
+        <button class="btn secondary" onclick="downloadPNG()">Descargar invitación</button>
+      </div>
+
+      <div style="height:18px"></div>
+
+      <div class="muted">¡Trae tu skin y prepara tus herramientas! Habrá recompensas para los mejores builds.</div>
+
+      <div class="ground" aria-hidden></div>
+      <div class="particles" aria-hidden id="particles"></div>
+    </section>
+
+    <aside class="panel">
+      <div class="menu">
+        <button onclick="scrollToSection('info')">Info</button>
+        <button onclick="scrollToSection('reglas')">Reglas</button>
+
+      </div>
+
+      <div id="info">
+        <h4 style="margin:8px 0;font-family:'Press Start 2P';font-size:13px;color:var(--accent)">Servidor</h4>
+        <div class="server-box">
+          <div class="server-row">
+            <div>
+              <div class="muted">IP / Puerto</div>
+              <div style="font-weight:800;font-family:'Press Start 2P'" id="server-ip">play.webones05.com</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+              <button class="btn" onclick="copyIP()">Copiar IP</button>
+              <button class="btn secondary" onclick="toggleMode()">Cambiar modo</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+          <li>Respeto entre jugadores.</li>
+          <li>No grief ni robo sin permiso.</li>
+          <li>Prohibido el uso de hacks.</li>
+           <li>Cualquier consulta con el admin</li>
+        </ol>
+      </div>
+
+      <div id="map" style="margin-top:12px">
+        <h4 style="margin:8px 0;font-family:'Press Start 2P';font-size:12px;color:var(--accent)">ENTRA Y DISFRUTA!!</h4>
+
+      </div>
+
+      <div style="height:12px"></div>
+      <div class="center muted">KD TEAM<br>VGEN</div>
+
+      <footer>© Nero_KD • Diseñado por Nero </footer>
+    </aside>
+
+  </main>
+
+  <!-- Modal -->
+  <div id="modal" class="modal" role="dialog" aria-hidden="true">
+    <div class="box">
+      <h3>Confirmar asistencia</h3>
+      <p class="muted">Escribe tu nick para confirmar. Esto es solo un formulario local (sin envío).</p>
+      <div style="height:8px"></div>
+      <input id="nick" placeholder="Tu nick en Minecraft" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#eaf2ef">
+      <div style="height:12px"></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button class="btn secondary" onclick="closeModal()">Cerrar</button>
+        <button class="btn" onclick="confirmNick()">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Particles generation (pixel confetti)
+    const particles = document.getElementById('particles');
+    for(let i=0;i<36;i++){
+      const el = document.createElement('div');
+      el.className='pixel';
+      el.style.left = Math.random()*100 + '%';
+      el.style.top = (Math.random()*20 - 10) + '%';
+      el.style.animationDelay = (Math.random()*6)+'s';
+      el.style.opacity = 0.6 + Math.random()*0.6;
+      el.style.transform = 'scale('+(0.6+Math.random()*1.6)+')';
+      particles.appendChild(el);
+    }
+
+    // Modal logic
+    function openModal(){
+      document.getElementById('modal').classList.add('show');
+      document.getElementById('modal').setAttribute('aria-hidden','false');
+      document.getElementById('nick').focus();
+    }
+    function closeModal(){
+      document.getElementById('modal').classList.remove('show');
+      document.getElementById('modal').setAttribute('aria-hidden','true');
+    }
+    function confirmNick(){
+      const nick = document.getElementById('nick').value.trim();
+      if(!nick){
+        alert('Escribe tu nick para confirmar.');
+        return;
+      }
+      alert('¡Gracias, ' + nick + '! Tu asistencia ha sido registrada localmente.');
+      closeModal();
+    }
+
+    function copyIP(){
+      const ip = document.getElementById('server-ip').innerText;
+      navigator.clipboard?.writeText(ip).then(()=>{
+        alert('IP copiada: ' + ip);
+      }).catch(()=>{
+        prompt('Copia la IP manualmente:', ip);
+      });
+    }
+
+    function toggleMode(){
+      const ipEl = document.getElementById('server-ip');
+      if(ipEl.innerText.includes('bedrock')){
+        ipEl.innerText = 'play.webones05.com';
+      } else {
+        ipEl.innerText = 'bedrock.webones05.com (Bedrock)';
+      }
+    }
+
+    function scrollToSection(id){
+      const el = document.getElementById(id);
+      if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
+    }
+
+    // Small download: convert invitation area to PNG (uses html2canvas if available)
+    function downloadPNG(){
+      // simple fallback: open print dialog
+      if(window.html2canvas){
+        html2canvas(document.querySelector('.hero')).then(canvas=>{
+          const a = document.createElement('a');a.href = canvas.toDataURL('image/png');a.download='invitation-webones05.png';a.click();
+        });
+      } else {
+        alert('No se detectó html2canvas. Para descargar como imagen instala la librería o usa "Imprimir > Guardar como PDF" desde tu navegador.');
+        window.print();
+      }
+    }
+
+    // Personalización rápida: lee parámetros de la URL para reemplazar fecha/hora/ip
+    (function applyParams(){
+      const params = new URLSearchParams(location.search);
+      if(params.get('fecha')) document.getElementById('fecha-text').innerText = params.get('fecha');
+      if(params.get('hora')) document.getElementById('hora-text').innerText = params.get('hora');
+      if(params.get('ip')) document.getElementById('server-ip').innerText = params.get('ip');
+    })();
+  </script>
+</body>
+</html>
